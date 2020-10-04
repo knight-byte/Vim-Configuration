@@ -16,6 +16,7 @@
 ```
 NVIM --- NeoVim
 Vim PLugin manager
+python>=3.5
 git
 ```
 
@@ -62,6 +63,11 @@ if you Dont have the ``` .config/nvim/init.vim ```
 mkdir .config/nvim  
 cd .config/nvim  
 touch init.vim
+```
+install pip for neovim
+```
+pip install neovim
+pip install pynvim
 ```
 ### After replacing the content of ```init.vim```
 Open/Run nvim
