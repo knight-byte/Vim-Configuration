@@ -211,16 +211,31 @@ let g:coc_global_extensions = [
   \ ]
 
 
+" inoremap <silent><expr> <DOWN>
+"      \ pumvisible() ? "\<C-n>" :
+"      \ <SID>check_back_space() ? "\<TAB>" :
+"      \ coc#refresh()
+"
+"inoremap <expr><S-TAB> pumvisible() ? "\<C-n>" : "\<C-h>"
+" Options are in .pylintrc!
+
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-n>" : "\<C-h>"
-" Options are in .pylintrc!
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
+
 highlight VertSplit ctermbg=253
 
 inoremap <silent><expr> <c-space> coc#refresh()
-
+" inoremap <expr> <DOWN> pumvisible() ? "\<TAB>" : "\<DOWN>"
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
@@ -398,10 +413,19 @@ let g:gitgutter_map_keys = 0
 let g:ctrlp_custom_ignore = '\v\.(npy|jpg|pyc|so|dll)$'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
-"  Resizinf spilt windows
+
 noremap <silent> <C-S-Left> :vertical resize +1<CR>
 noremap <silent> <C-S-Right> :vertical resize -1<CR>
 noremap <silent> <C-S-Up> :resize +1<CR>
 noremap <silent> <C-S-Down> :resize -1<CR>
-noremap <silent> <f5> :!python % <CR>
+noremap <silent> <f5> :w<Cr> :!python % <CR>
+
+" CTRL-C to copy (visual mode)
+vmap <C-c> y
+" CTRL-X to cut (visual mode)
+vmap <C-x> x
+" CTRL-V to paste (insert mode)
+imap <C-v> <esc>P
+
+imap <C-s> <esc>:w<CR>
 
