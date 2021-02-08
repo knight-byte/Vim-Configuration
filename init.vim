@@ -1,7 +1,21 @@
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"        _    _                            _                     |
+"       / \  | |__  _   _ _ __   __ _  ___| |__   __ _ _ __      |
+"      / _ \ | '_ \| | | | '_ \ / _` |/ __| '_ \ / _` | '__|     |
+"     / ___ \| |_) | |_| | | | | (_| | (__| | | | (_| | |        |
+"    /_/   \_\_.__/ \__,_|_| |_|\__,_|\___|_| |_|\__,_|_|        |
+"                                                                |
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+~~~~~~~~~~~~+
+"                                                   |
+" FILENAME : init.vim                               |
+" AUTHOR   : Abunachar ( knight-byte )              |
+" GITHUB   : https://www.github.com/knight-byte     |
+"                                                   |
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+
+" Plugins  {{{
 syntax on
-
 call plug#begin('~/.vim/plugged')
-
 Plug 'scrooloose/nerdtree'  " file list
 Plug 'majutsushi/tagbar'  " show tags in a bar (functions etc) for easy browsing
 Plug 'vim-airline/vim-airline'  " make statusline awesome
@@ -22,41 +36,30 @@ Plug 'ncm2/ncm2'  " awesome autocomplete plugin
 Plug 'ncm2/ncm2-bufword'  " buffer keyword completion
 Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-"Async autocompletion
-Plug 'Shougo/deoplete.nvim'
-
+Plug 'Shougo/deoplete.nvim' "Async autocompletion
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
-" Python autocompletion
-Plug 'zchee/deoplete-jedi'
-" Completion from other opened files
-Plug 'Shougo/context_filetype.vim'
-" Just to add the python go-to-definition and similar features, autocompletion
-Plug 'davidhalter/jedi-vim'
-" Automatically close parenthesis, etc
-Plug 'Townk/vim-autoclose'
-" Surround
+Plug 'zchee/deoplete-jedi' " Python autocompletion
+Plug 'Shougo/context_filetype.vim' " Completion from other opened files
+Plug 'davidhalter/jedi-vim' " Just to add the python go-to-definition and similar features, autocompletion
+Plug 'Townk/vim-autoclose' " Automatically close parenthesis, etc
 Plug 'tpope/vim-surround'
-" Indent text object
-Plug 'michaeljsmith/vim-indent-object'
-" Indentation based movements
-Plug 'jeetsukumaran/vim-indentwise'
-" Better language packs
-Plug 'sheerun/vim-polyglot'
-" Ack code search (requires ack installed in the system)
-Plug 'mileszs/ack.vim'
-" Paint css colors with the real color
-Plug 'lilydjwg/colorizer'
+Plug 'michaeljsmith/vim-indent-object' " Indent text object
+Plug 'jeetsukumaran/vim-indentwise' " Indentation based movements
+Plug 'sheerun/vim-polyglot' " Better language packs
+Plug 'mileszs/ack.vim' " Ack code search (requires ack installed in the system)
+Plug 'lilydjwg/colorizer' " Paint css colors with the real color
 call plug#end()
 
+" }}}
+" Set options {{{
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " path to your python 
 let g:python3_host_prog = '/usr/bin/python3'
 let g:python_host_prog = '/usr/bin/python'
 
 filetype indent on
-
+set foldmethod=marker
 set fileformat=unix
 set shortmess+=c
 
@@ -106,29 +109,31 @@ set t_vb=
 set relativenumber
 set viminfo='20,<1000  " allow copying of more than 50 lines to other applications
 
-" easy split movement
+" }}}
+" easy split movement {{{
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-
-" tabs:
+" }}}
+" tabs: {{{
 nnoremap tn :tabnew<Space>
 nnoremap tk :tabnext<CR>
 nnoremap tj :tabprev<CR>
 nnoremap th :tabfirst<CR>
 nnoremap tl :tablast<CR>
 
-" colorscheme options
+" }}}
+" colorscheme options {{{
 colorscheme gruvbox
-
-" mapping Esc
+" }}}
+" mapping Esc {{{
 imap <F13> <Esc>
 cnoremap <Esc> <C-c>
 inoremap <c-c> <ESC>
 nnoremap <C-z> <Esc>  " disable terminal ctrl-z
-
-" map S to replace current word with pasteboard
+" }}}
+" map S to replace current word with pasteboard {{{
 nnoremap S diw"0P
 nnoremap cc "_cc
 nnoremap q: :q<CR>
@@ -140,12 +145,12 @@ nnoremap x "_x
 vnoremap x "_x
 
 set clipboard=unnamedplus
-
-" toggle nerdtree on ctrl+n
+" }}}
+" toggle nerdtree on ctrl+n {{{
 map <C-n> :NERDTreeToggle<CR>
 map <C-t> :set nosplitright<CR>:TagbarToggle<CR>:set splitright<CR>
-
-" ncm2 settings
+" }}}
+" ncm2 settings {{{
 autocmd BufEnter * call ncm2#enable_for_buffer()
 set completeopt=menuone,noselect,noinsert
 " make it FAST
@@ -154,18 +159,18 @@ let ncm2#complete_length = [[1,1]]
 let g:ncm2#matcher = 'substrfuzzy'
 
 set pumheight=5
-
-"inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" }}}
+" Tab set {{{
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <silent> <expr> <CR> (pumvisible() && empty(v:completed_item)) ?  "\<c-y>\<cr>" : "\<CR>"
-
+" }}}
+" Airline settings {{{
+" do not show error/warning section
+let g:airline_section_error = ""
 let g:airline_powerline_fonts = 1
 let g:airline_section_y = ""
 let g:airline#extensions#tabline#enabled = 1
- 
-" Airline settings
-" do not show error/warning section
-let g:airline_section_error = ""
 let g:airline_section_warning = ""
 
 if !exists('g:airline_symbols')
@@ -177,29 +182,37 @@ let g:mapleader = " "
 let maplocalleader = "`"
 let g:maplocalleader = "`"
 nnoremap <SPACE> <Nop>
-
-"auto indent for brackets
+" }}}
+"auto indent for brackets {{{
 nmap <leader>w :w!<cr>
 nmap <leader>q :lcl<cr>:q<cr>
 nnoremap <leader>h :nohlsearch<Bar>:echo<CR>
-
-" FlyGrep settings
+"}}}
+" FlyGrep settings {{{
 nnoremap <leader>s :FlyGrep<cr>
-
-" easy breakpoint python
+" }}}
+" easy breakpoint python {{{
 au FileType python map <silent> <leader>b ofrom pudb import set_trace; set_trace()<esc>
 au FileType python map <silent> <leader>B Ofrom pudb import set_trace; set_trace()<esc>
 au FileType python map <silent> <leader>j ofrom pdb import set_trace; set_trace()<esc>
 au FileType python map <silent> <leader>J Ofrom pdb import set_trace; set_trace()<esc>
-
-" ale options
+" }}}
+" ale options {{{
 let g:ale_python_flake8_options = '--ignore=E129,E501,E302,E265,E241,E305,E402,W503'
 let g:ale_python_pylint_options = '-j 0 --max-line-length=120'
 let g:ale_list_window_size = 4
 let g:ale_sign_column_always = 0
 let g:ale_open_list = 1
 let g:ale_keep_list_window_open = '1'
-
+let g:ale_sign_error = '‼'
+let g:ale_sign_warning = '∙'
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_enter = '0'
+let g:ale_lint_on_save = '1'
+nmap <silent> <C-M> <Plug>(ale_previous_wrap)
+nmap <silent> <C-m> <Plug>(ale_next_wrap)
+" }}}
+" COC configuration {{{
 let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-pairs',
@@ -296,8 +309,8 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Using CocList
+" }}}
+" Using CocList {{{
 " Show all diagnostics
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions
@@ -322,16 +335,8 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-
-let g:ale_sign_error = '‼'
-let g:ale_sign_warning = '∙'
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_enter = '0'
-let g:ale_lint_on_save = '1'
-nmap <silent> <C-M> <Plug>(ale_previous_wrap)
-nmap <silent> <C-m> <Plug>(ale_next_wrap)
-
-" mapping to make movements operate on 1 screen line in wrap mode
+ "}}}
+" mapping to make movements operate on 1 screen line in wrap mode {{{
 function! ScreenMovement(movement)
    if &wrap
       return "g" . a:movement
@@ -350,15 +355,16 @@ nnoremap <silent> <expr> k ScreenMovement("k")
 nnoremap <silent> <expr> 0 ScreenMovement("0")
 nnoremap <silent> <expr> ^ ScreenMovement("^")
 nnoremap <silent> <expr> $ ScreenMovement("$")
-
-" highlight python and self function
+" }}}
+" highlight python and self function {{{
 autocmd BufEnter * syntax match Type /\v\.[a-zA-Z0-9_]+\ze(\[|\s|$|,|\]|\)|\.|:)/hs=s+1
 autocmd BufEnter * syntax match pythonFunction /\v[[:alnum:]_]+\ze(\s?\()/
 hi def link pythonFunction Function
 autocmd BufEnter * syn match Self "\(\W\|^\)\@<=self\(\.\)\@="
 highlight self ctermfg=239
 
-" jedi options
+" }}}
+" jedi options {{{ 
 let g:jedi#auto_initialization = 1
 let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
@@ -373,16 +379,18 @@ let g:jedi#enable_speed_debugging=0
 let g:jedi#force_py_version = 3
 let g:pymode_python = 'python3'
 
-" Impsort option
+" }}}
+" Impsort option {{{
 hi pythonImportedObject ctermfg=127
 hi pythonImportedFuncDef ctermfg=127
 hi pythonImportedClassDef ctermfg=127
 
-" Remove all trailing whitespace by pressing C-S
+" }}}
+" Remove all trailing whitespace by pressing C-S {{{
 nnoremap <C-S> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
-
-" move between defs python:
+" }}}
+" move between defs python {{{
 " NOTE: this break shortcuts with []
 nnoremap [[ [m
 nnoremap ]] ]m
@@ -399,27 +407,28 @@ augroup bracketmaps
     autocmd!
     autocmd FileType python call MakeBracketMaps()
 augroup END
-
-" neovim options
+" }}}
+" neovim options {{{
 au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 nnoremap <C-a> <Esc>
 nnoremap <C-x> <Esc>
-
-" vimgutter options
+" }}}
+" vimgutter options {{{
 let g:gitgutter_override_sign_column_highlight = 0
 let g:gitgutter_map_keys = 0
- 
-" ctrl p options
+" }}}
+" ctrl p options {{{
 let g:ctrlp_custom_ignore = '\v\.(npy|jpg|pyc|so|dll)$'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-
-
+" }}}
+" Split Alignment {{{
 noremap <silent> <C-S-Left> :vertical resize +1<CR>
 noremap <silent> <C-S-Right> :vertical resize -1<CR>
 noremap <silent> <C-S-Up> :resize +1<CR>
 noremap <silent> <C-S-Down> :resize -1<CR>
-noremap <silent> <f5> :w<Cr> :!python % <CR>
-
+noremap <silent> <f5> :!python % <CR>
+" }}}
+" Copy Paste Command{{{
 " CTRL-C to copy (visual mode)
 vmap <C-c> y
 " CTRL-X to cut (visual mode)
@@ -428,4 +437,4 @@ vmap <C-x> x
 imap <C-v> <esc>P
 
 imap <C-s> <esc>:w<CR>
-
+" }}}
