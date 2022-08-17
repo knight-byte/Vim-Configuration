@@ -49,6 +49,22 @@ Plug 'jeetsukumaran/vim-indentwise' " Indentation based movements
 Plug 'sheerun/vim-polyglot' " Better language packs
 Plug 'mileszs/ack.vim' " Ack code search (requires ack installed in the system)
 Plug 'lilydjwg/colorizer' " Paint css colors with the real color
+Plug 'ryanoasis/vim-devicons' "NerdTree Icon
+"Plug 'vim-syntastic/syntastic' "Syntax highlight
+"Plug 'nvie/vim-flake8' "PEP check
+Plug 'tell-k/vim-autopep8' "autopep8
+"Plug 'ghifarit53/tokyonight-vim' "Tokyonight theme
+"Plug 'joshdick/onedark.vim' "Onedark
+Plug 'Yggdroot/indentLine'
+Plug 'ajmwagar/vim-deus'
+"Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' } "Highlight python
+
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-rmarkdown'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+
+
+
 call plug#end()
 
 " }}}
@@ -96,7 +112,7 @@ set noshowcmd
 
 set laststatus=2  " always slow statusline
 
-set splitright  " i prefer splitting right and below
+set splitright  "i prefer splitting right and below
 set splitbelow
 
 set hlsearch  " highlight search and search while typing
@@ -108,6 +124,16 @@ set visualbell
 set t_vb=
 set relativenumber
 set viminfo='20,<1000  " allow copying of more than 50 lines to other applications
+
+set encoding=UTF-8
+"let g:WebDevIconsNerdTreeAfterGlyphPadding = '  '
+autocmd FileType nerdtree setlocal nolist
+let g:WebDevIconsNerdTreeAfterGlyphPadding = '  '
+
+" semshi settings
+"let g:semshi#error_sign	= v:false 
+" intendation lines
+"let g:indentLine_enabled = 1
 
 " }}}
 " easy split movement {{{
@@ -126,6 +152,19 @@ nnoremap tl :tablast<CR>
 " }}}
 " colorscheme options {{{
 colorscheme gruvbox
+let g:gruvbox_contrast_dark = 'hard'
+"highlight Comment ctermfg=Red
+
+"colorscheme deus
+"let g:deus_termcolors=256
+
+"set termguicolors
+
+"let g:tokyonight_style = 'storm' " available: night, storm
+"let g:tokyonight_enable_italic = 1
+
+"colorscheme tokyonight
+"colorscheme onedark
 " }}}
 " mapping Esc {{{
 imap <F13> <Esc>
@@ -167,12 +206,12 @@ inoremap <silent> <expr> <CR> (pumvisible() && empty(v:completed_item)) ?  "\<c-
 " }}}
 " Airline settings {{{
 " do not show error/warning section
+let g:airline_symbols = {'s1':''}
 let g:airline_section_error = ""
 let g:airline_powerline_fonts = 1
-let g:airline_section_y = ""
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_section_warning = ""
-
+let g:airline_section_c = "%<%t%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#%#__accent_bold#%{airline#util#wrap(airline#extensions#coc#get_status(),0)}%#__restore__#%#__accent_bold#%#__restore__#"
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
@@ -198,17 +237,26 @@ au FileType python map <silent> <leader>j ofrom pdb import set_trace; set_trace(
 au FileType python map <silent> <leader>J Ofrom pdb import set_trace; set_trace()<esc>
 " }}}
 " ale options {{{
+let g:autopep8_on_save = 1
+let g:autopep8_disable_show_diff=1
 let g:ale_python_flake8_options = '--ignore=E129,E501,E302,E265,E241,E305,E402,W503'
-let g:ale_python_pylint_options = '-j 0 --max-line-length=120'
+"let g:ale_python_pylint_options = '-j 0 --max-line-length=120'
+let g:ale_fixers = {
+\   'javascript': ['prettier'],
+\   'css': ['prettier'],
+\   'python': ['prettier'],
+\}
+" let g:ale_linters_ignore = {'python': ['pylint','flake8','pyls','pyright']}
 let g:ale_list_window_size = 4
 let g:ale_sign_column_always = 0
 let g:ale_open_list = 1
-let g:ale_keep_list_window_open = '1'
+let g:ale_keep_list_window_open = '0'
 let g:ale_sign_error = '‼'
 let g:ale_sign_warning = '∙'
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter = '0'
 let g:ale_lint_on_save = '1'
+let g:ale_cpp_clangcheck_executable = ''
 nmap <silent> <C-M> <Plug>(ale_previous_wrap)
 nmap <silent> <C-m> <Plug>(ale_next_wrap)
 " }}}
@@ -221,9 +269,10 @@ let g:coc_global_extensions = [
   \ 'coc-prettier', 
   \ 'coc-json', 
   \ 'coc-python',
+  \ 'coc-clangd',
   \ ]
 
-
+let python_highlight_all=1
 " inoremap <silent><expr> <DOWN>
 "      \ pumvisible() ? "\<C-n>" :
 "      \ <SID>check_back_space() ? "\<TAB>" :
@@ -250,8 +299,8 @@ highlight VertSplit ctermbg=253
 inoremap <silent><expr> <c-space> coc#refresh()
 " inoremap <expr> <DOWN> pumvisible() ? "\<TAB>" : "\<DOWN>"
 " Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" nmap <silent> [g <Plug>(coc-diagnostic-prev)
+" nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
@@ -426,7 +475,6 @@ noremap <silent> <C-S-Left> :vertical resize +1<CR>
 noremap <silent> <C-S-Right> :vertical resize -1<CR>
 noremap <silent> <C-S-Up> :resize +1<CR>
 noremap <silent> <C-S-Down> :resize -1<CR>
-noremap <silent> <f5> :!python % <CR>
 " }}}
 " Copy Paste Command{{{
 " CTRL-C to copy (visual mode)
@@ -438,3 +486,25 @@ imap <C-v> <esc>P
 
 imap <C-s> <esc>:w<CR>
 " }}}
+" Markdown {{{
+let g:markdown_fenced_languages = ['python']
+let g:indentLine_concealcursor = ""
+" let g:indentLine_conceallevel = 0
+highlight htmlBold gui=bold ctermfg=203
+highlight htmlItalic gui=italic ctermfg=111
+
+" autocmd BufNewFile,BufFilePre,BufRead *.rmd,*.Rmd set filetype=markdown
+
+autocmd FileType python,python3,py,py3 map <F5> :!python % <CR>
+autocmd Filetype r,R map <f5> :!Rscript % <CR>
+autocmd FileType CPP,Cpp,cpp map <F5> :!g++ % -o %:r.out<CR>
+autocmd FileType CPP,Cpp,cpp map <F6> :!if [[ -f testcase.txt ]];then cat testcase.txt \| ./%:r.out ;else echo "No file";fi<CR>
+" autocmd FileType CPP,Cpp,cpp map <F8> :!cat testcase.txt | ./%<CR>
+autocmd FileType CPP,Cpp,cpp map <F7> :!g++ % -o %:r.out && ./%:r.out<CR>
+autocmd Filetype markdown,rmd,Rmd  map <F5> :!Rscript -e "rmarkdown::render('%', 'pdf_document',quiet=TRUE)" && echo "output created : " %:r".pdf" <CR>
+autocmd Filetype tex  map <F5> :!pdflatex % -o %:r.pdf<CR>
+autocmd Filetype tex,markdown,rmd,Rmd map <F6> :!if [[ -f %:r".pdf" ]];then zathura %:r.pdf & ;else echo "ERROR : "%:r".pdf file don't exists"; fi <CR>
+
+" noremap <silent> <f6> :!Rscript -e "rmarkdown::render('%', 'pdf_document')"<CR>
+"}}}
+"
